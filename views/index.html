@@ -9,6 +9,7 @@
   </head>
   <body>
     {{ template "form" . }}
+    <hr />
     {{ template "display" . }}
   </body>
 </html>
@@ -16,14 +17,16 @@
 
 
 {{ block "form" . }}
-<form>
+<!-- The swap is for handling how we change things, so it doesnt render unnecesary html -->
+<form hx-post="/contacts" hx-target="#display" hx-swap="outerHTML">
   name: <input type="text" name="name" id="">
   email: <input type="text" name="email" >
+  <button type="submit">Create contact</button>
 </form>
 {{ end }}
 
 {{ block "display" . }}
-<div style="display: flex; flex-direction: column;">
+<div style="display: flex; flex-direction: column;" id="display">
   {{ range .Contacts }}
     <div>
       Name: <span>{{ .Name }}</span>
