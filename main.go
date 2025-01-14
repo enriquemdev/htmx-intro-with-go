@@ -40,12 +40,34 @@ type Data struct {
 	Contacts Contacts
 }
 
+// Método hasEmail que posee el tipo Data para verificar si el email que trae la data ya existe dentro de los Contactos existentes
+func (d *Data) hasEmail(email string) bool {
+	for _, contact := range d.Contacts {
+		if contact.Email == email {
+			return true
+		}
+	}
+	return false
+}
+
 func newData() Data {
 	return Data{
 		Contacts: []Contact{
 			newContact("john", "j@gmail.com"),
 			newContact("clara", "c@gmail.com"),
 		},
+	}
+}
+
+type FormData struct {
+	Values map[string]string
+	Errors map[string]string
+}
+
+func newFormData() FormData {
+	return FormData{
+		Values: make(map[string]string),
+		Errors: make(map[string]string),
 	}
 }
 
@@ -64,6 +86,9 @@ func main() {
 		name := c.FormValue("name")
 		email := c.FormValue("email")
 
+		if data.hasEmail(email) {
+			return c.Render(400, "form", data)
+		}
 		data.Contacts = append(data.Contacts, newContact(name, email))
 		return c.Render(200, "display", data)
 	})

@@ -19,8 +19,17 @@
 {{ block "form" . }}
 <!-- The swap is for handling how we change things, so it doesnt render unnecesary html -->
 <form hx-post="/contacts" hx-target="#display" hx-swap="outerHTML">
-  name: <input type="text" name="name" id="">
-  email: <input type="text" name="email" >
+  name: <input 
+    {{ if .Values.name }} value="{{ .Values.name }}" {{ end }}
+  type="text" name="name" id="">
+  email: <input 
+  {{ if .Values.email }} value="{{ .Values.email }}" {{ end }}
+  type="text" name="email" >
+
+  {{ if .Errors.email }}
+  <div style="color: red;">{{ .Errors.email }}</div>
+  {{ end }}
+  
   <button type="submit">Create contact</button>
 </form>
 {{ end }}
